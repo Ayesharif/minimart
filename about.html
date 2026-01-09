@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - All in One Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .story-text {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .story-text p {
+            margin-bottom: 20px;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .value-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+
+        .value-card h3 {
+            font-size: 22px;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item h2 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .team-section {
+            background: #f8f9fa;
+            padding: 80px 20px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 50px auto 0;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-photo {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .team-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            font-size: 20px;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .team-info p {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .team-info .bio {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .story-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .stat-item h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="hero">
+        <h1>About All in One Store</h1>
+        <p>Your trusted destination for quality products, exceptional service, and unbeatable value since day one</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2 class="section-title">Our Story</h2>
+            <div class="story-content">
+                <div class="story-text">
+                    <p>All in One Store was born from a simple vision: to create a shopping experience where customers can find everything they need under one roof, backed by outstanding service and competitive prices.</p>
+                    <p>What started as a small venture has grown into a trusted e-commerce platform serving thousands of satisfied customers. We've built our reputation on quality products, reliable delivery, and customer satisfaction that goes beyond the sale.</p>
+                    <p>Today, we continue to expand our product range, improve our services, and innovate our platform to provide you with the best online shopping experience possible.</p>
+                </div>
+                <div class="story-image">
+                    🛒
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Our Values</h2>
+            <p class="section-subtitle">The principles that guide everything we do</p>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">⭐</div>
+                    <h3>Quality First</h3>
+                    <p>We carefully curate every product to ensure it meets our high standards of quality and reliability.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💝</div>
+                    <h3>Customer Focused</h3>
+                    <p>Your satisfaction is our priority. We're here to make your shopping experience seamless and enjoyable.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🚀</div>
+                    <h3>Innovation</h3>
+                    <p>We constantly evolve our platform and services to bring you the latest in e-commerce technology.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Trust & Transparency</h3>
+                    <p>We believe in honest communication and building lasting relationships with our customers.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3>Fast Delivery</h3>
+                    <p>We understand you want your products quickly. That's why we prioritize swift and reliable shipping.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💰</div>
+                    <h3>Best Value</h3>
+                    <p>Quality doesn't have to break the bank. We offer competitive prices without compromising on quality.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h2>50K+</h2>
+                <p>Happy Customers</p>
+            </div>
+            <div class="stat-item">
+                <h2>10K+</h2>
+                <p>Products</p>
+            </div>
+            <div class="stat-item">
+                <h2>100+</h2>
+                <p>Brands</p>
+            </div>
+            <div class="stat-item">
+                <h2>4.8★</h2>
+                <p>Average Rating</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="team-section">
+        <h2 class="section-title">Meet Our Team</h2>
+        <p class="section-subtitle">The passionate people behind All in One Store</p>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-photo">👨‍💼</div>
+                <div class="team-info">
+                    <h3>John Anderson</h3>
+                    <p>Founder & CEO</p>
+                    <p class="bio">Visionary leader with 15 years of e-commerce experience, driving innovation and growth.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-photo">👩‍💼</div>
+                <div class="team-info">
+                    <h3>Sarah Mitchell</h3>
+                    <p>Head of Operations</p>
+                    <p class="bio">Ensures smooth operations and customer satisfaction with meticulous attention to detail.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-photo">👨‍💻</div>
+                <div class="team-info">
+                    <h3>Mike Chen</h3>
+                    <p>Tech Lead</p>
+                    <p class="bio">Building cutting-edge solutions to enhance your shopping experience every day.</p>
+                </div>
+            </div>
+            <div class="team-card">
+                <div class="team-photo">👩‍🎨</div>
+                <div class="team-info">
+                    <h3>Emma Rodriguez</h3>
+                    <p>Marketing Director</p>
+                    <p class="bio">Connecting our amazing products with customers who will love them most.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Ready to Shop?</h2>
+        <p>Discover thousands of quality products at unbeatable prices</p>
+        <a href="/" class="btn-primary">Start Shopping</a>
+    </div>
+    <script src="nav.js"></script>
+    <script>
+        
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-placeholder').innerHTML = html;
+                loadUser();
+            });
+    </script>
+</body>
+</html>

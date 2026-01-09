@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+<link rel="stylesheet" href="register.css">
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+    <div class="register-container">
+        <div class="form-logo">
+            <div class="logo-text">🔐 MyApp</div>
+        </div>
+
+        <h2>Create Account</h2>
+        <p class="subtitle">Sign up to get started</p>
+
+        <p id="message" class=""></p>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" placeholder="John Doe" required>
+                <div class="error-message">Please enter your full name</div>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="Lahore" required>
+                <div class="error-message">Please enter your city</div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" placeholder="+923........" required>
+                <div class="error-message">Please enter your phone number</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+                <div class="error-message">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="strength-bar"></div>
+                </div>
+                <div class="error-message">Password must be at least 8 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="••••••••" required>
+                <div class="error-message">Passwords do not match</div>
+            </div>
+
+
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+
+
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Sign in</a>
+        </div>
+    </div>
+
+    <script>
+
+
+
+
+
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-placeholder').innerHTML = html;
+                loadUser();
+            });
+        const message = document.getElementById('message');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const strengthBar = document.getElementById('strength-bar');
+        const form = document.getElementById('register-form');
+
+        // Password strength checker
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength === 0) {
+                strengthBar.className = 'password-strength-bar';
+            } else if (strength <= 2) {
+                strengthBar.className = 'password-strength-bar weak';
+            } else if (strength === 3) {
+                strengthBar.className = 'password-strength-bar medium';
+            } else {
+                strengthBar.className = 'password-strength-bar strong';
+            }
+        });
+
+        // Form validation
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const fullname = document.getElementById('fullname');
+            const phone = document.getElementById('phone');
+            const city = document.getElementById('city');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm-password');
+
+
+            // Reset errors
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+
+            // Validate full name
+            if (fullname.value.trim().length < 2) {
+                fullname.closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+
+            // Validate email
+            if (!email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                email.closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+
+            // Validate password
+            if (password.value.length < 8) {
+                password.closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+
+            // Validate password match
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+
+            // Validate terms
+
+            if (isValid) {
+                const Udata={
+                    fullName:fullname.value,
+                    email:email.value,
+                    password:password.value,
+                    city:city.value,
+                    phone:phone.value
+                }
+
+// Assume 'Udata' is defined and 'message' is a DOM element
+// const message = document.getElementById('message-area'); 
+// const Udata = { username: 'testuser', password: 'password123' };
+
+fetch("http://localhost:3000/register", {
+    method: "POST",
+    credentials: "include",
+    
+    // CRITICAL: Tell the server we are sending JSON
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    
+    body: JSON.stringify(Udata)
+})
+.then(response => {
+    // 1. Check for bad HTTP status codes (e.g., 400, 500)
+    if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+    }
+    // 2. Parse the body as JSON
+    return response.json();
+})
+.then(data => {
+    // 3. Handle custom server-side status codes
+    message.innerText = data.message;
+    
+    if (data.status === 1) {
+        message.classList.remove("error");
+        message.classList.add("success");
+        // Optional: Clear form or redirect user on success
+
+                setTimeout(() => {
+            window.location.href="index.html"
+        }, 2000);
+    } else {
+        message.classList.remove("success");
+        message.classList.add("error");
+    }
+    console.log("Server Response:", data);
+})
+.catch(error => {
+    // 4. Handle network errors or errors thrown in the promise chain
+    message.classList.remove("success");
+    message.classList.add("error");
+    message.innerText = error.message;
+    console.error('Fetch Error:', error.message);
+}); 
+                // alert('Registration successful!\nName: ' + fullname.value + '\nEmail: ' + email.value + '\n(This is a demo)');
+                // form.reset();
+                strengthBar.className = 'password-strength-bar';
+            }
+        });
+
+
+
+    </script>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+    <div id="toster" class="block"></div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                
+                                <li>
+                    <a href="#" class="active" onclick="showSection('profile')">
+                        <span class="icon">👤</span>
+                        <span>Profile Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('orders')">
+                        <span class="icon">📦</span>
+                        <span>My Orders</span>
+                    </a>
+                </li>
+
+
+
+                <li>
+                    <a href="#" onclick="showSection('security')">
+                        <span class="icon">🔒</span>
+                        <span>Security</span>
+                    </a>
+                </li>
+                <li>
+                    <a onclick="logout()" style="color: #ef4444;">
+                        <span class="icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+           
+
+            <!-- Orders Section -->
+            <section id="orders" class="section">
+                <h1 class="section-title">My Orders</h1>
+
+                <div class="orders-filter">
+                    <button class="filter-btn active" onclick="filterOrders('all')">All Orders</button>
+                    <button class="filter-btn" onclick="filterOrders('processing')">Processing</button>
+                    <button class="filter-btn" onclick="filterOrders('shipped')">Shipped</button>
+                    <button class="filter-btn" onclick="filterOrders('delivered')">Delivered</button>
+                    <button class="filter-btn" onclick="filterOrders('cancelled')">Cancelled</button>
+                </div>
+
+                <div id="orders-list"></div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="section active">
+                <h1 class="section-title">Profile Settings</h1>
+
+                <div class="profile-header">
+                    <div class="profile-avatar" id="avatar">JD</div>
+                    <div class="profile-info">
+                        <h2 id="header-name">John Doe</h2>
+                        <p id="header-email">john.doe@example.com</p>
+                    </div>
+                </div>
+
+                <form onsubmit="saveProfile(event)">
+                    <div id="message" class=""></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="fullName" value="John" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="john.doe@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" value="+1 234 567 8900" required>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn">Save Changes</button>
+                </form>
+            </section>
+
+            <!-- Addresses Section -->
+            <section id="addresses" class="section">
+                <h1 class="section-title">Saved Addresses</h1>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Home</div>
+                            <div class="order-date">Default Address</div>
+                        </div>
+                        <span class="order-status delivered">Default</span>
+                    </div>
+                    <p style="color: #6b7280; margin-bottom: 0.5rem;">123 Main Street, Apt 4B</p>
+                    <p style="color: #6b7280; margin-bottom: 1rem;">New York, NY 10001, USA</p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="order-btn">Edit</button>
+                        <button class="order-btn">Delete</button>
+                    </div>
+                </div>
+
+                <button class="btn" style="margin-top: 1rem;">+ Add New Address</button>
+            </section>
+
+
+
+            <!-- Security Section -->
+            <section id="security" class="section">
+                <h1 class="section-title">Security Settings</h1>
+                <form onsubmit="changePassword(event)">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" required>
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="strength-bar"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Update Password</button>
+                </form>
+
+
+            </section>
+        </main>
+    </div>
+    <script>
+        
+        const message = document.getElementById('toster');
+
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-placeholder').innerHTML = html;
+                loadUser();
+            });
+        const name = document.getElementById("fullName");
+        const city = document.getElementById("city");
+        const phone = document.getElementById("phone");
+        const email = document.getElementById("email");
+        
+        let allOrders = [];
+        const API_URL = 'http://localhost:3000/getorders'; // Replace with your actual API endpoint
+
+// Fetch orders from API
+async function fetchOrders() {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add authorization header if needed
+                // 'Authorization': 'Bearer YOUR_TOKEN'
+            },
+            credentials:"include"
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch orders');
+        }
+
+        const data = await response.json();
+        
+        if (data.status === 1 && data.order) {
+            allOrders = data.order;
+            renderOrders(allOrders, 'orders-list');
+        } else {
+            document.getElementById('orders-list').innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No orders found</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        document.getElementById('orders-list').innerHTML = '<p style="text-align:center;color:#f44;padding:40px;">Failed to load orders. Please try again later.</p>';
+    }
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
+function getStatusClass(status) {
+    const statusMap = {
+        'Pending': 'processing',
+        'Processing': 'processing',
+        'Shipped': 'shipped',
+        'Delivered': 'delivered',
+        'Cancelled': 'cancelled'
+    };
+    return statusMap[status] || 'processing';
+}
+
+function renderOrders(orders, containerId) {
+    const container = document.getElementById(containerId);
+    
+    if (orders.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No orders found</p>';
+        return;
+    }
+    
+    container.innerHTML = orders.map(order => `
+    <div class="order-card">
+        <div class="order-header">
+            <div>
+                <div class="order-id">Order #${order._id}</div>
+                <div class="order-date">${formatDate(order.createdAt)}</div>
+                </div>
+                <div class="order-status ${getStatusClass(order.orderStatus)}">${order.orderStatus.toUpperCase()}</div>
+            </div>
+            <div class="order-items">
+                ${order.items.map(item => `
+                    <div class="order-item">
+                        <img src="${item.product.images[0]?.imageUrl || 'https://via.placeholder.com/80'}" 
+                        alt="${item.product.title}" 
+                        class="item-image">
+                        <div class="item-details">
+                            <div class="item-name">${item.product.title}</div>
+                            <div class="item-quantity">Quantity: ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">$${item.product.price * item.quantity}</div>
+                            </div>
+
+                                
+                            `).join('')}
+                            </div>
+                                                        <div>
+                                <div class="item-name">
+                                  Delivery Address
+                                </div>
+                                <div class="item-quantity">
+                                    ${order.deliveryAddress.address},
+                                    ${order.deliveryAddress.city}
+                                </div>
+                                
+                                </div>
+                            <div class="order-footer">
+                                <div class="order-total">Total: $${order.totalAmount}</div>
+                                
+                                    </div>
+        </div>
+        `).join('');
+    }
+
+    function filterOrders(status) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    const filtered = status === 'all' 
+        ? allOrders 
+        : allOrders.filter(order => getStatusClass(order.orderStatus) === status);
+        
+    renderOrders(filtered, 'orders-list');
+}
+
+function viewOrderDetails(orderId) {
+    window.location.href = `order-details.html?id=${orderId}`;
+}
+
+function buyAgain(orderId) {
+    const order = allOrders.find(o => o._id === orderId);
+    if (order) {
+        alert('Adding items to cart...');
+        // Implement your buy again logic here
+    }
+}
+
+async function cancelOrder(orderId) {
+    if (confirm('Are you sure you want to cancel this order?')) {
+        try {
+            // Make API call to cancel order
+            // const response = await fetch(`${API_URL}/${orderId}/cancel`, { method: 'POST' });
+            alert('Order cancelled successfully');
+            fetchOrders(); // Refresh orders
+        } catch (error) {
+            alert('Failed to cancel order');
+        }
+    }
+}
+
+// Call this when page loads or section is shown
+fetchOrders();
+
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    
+    document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            event.target.closest('a').classList.add('active');
+            
+            if (sectionId === 'orders') {
+                renderOrders(orders, 'orders-list');
+            } else if (sectionId === 'dashboard') {
+                renderOrders(orders.slice(0, 2), 'recent-orders');
+            }
+        }
+        
+        function viewOrder(orderId) {
+            alert('View details for ' + orderId + '\n(This is a demo)');
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            const data = {
+                fullName: name.value,
+                city: city.value,
+                phone: phone.value,
+                email: email.value
+            }
+            console.log(data);
+            fetch("http://localhost:3000/updateUser", {
+                method: "POST",
+                credentials: "include",
+                
+                // CRITICAL: Tell the server we are sending JSON
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // 1. Check for bad HTTP status codes (e.g., 400, 500)
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    // 2. Parse the body as JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 3. Handle custom server-side status codes
+                    message.innerText = data.message;
+                    
+                    if (data.status === 1) {
+                        message.classList.remove("error", "block");
+                        message.classList.add("success", "active");
+
+                        setTimeout(() => {
+                            userData()
+                        }, 3000);
+                        // Optional: Clear form or redirect user on success
+                    } else {
+                        message.classList.remove("success", "block");
+                        message.classList.add("error", "active");
+                    }
+                    console.log("Server Response:", data);
+                })
+                .catch(error => {
+                    // 4. Handle network errors or errors thrown in the promise chain
+                    message.classList.remove("success", "block");
+                    message.classList.add("error", "active");
+                    message.innerText = error.message;
+                    console.error('Fetch Error:', error.message);
+                });
+                
+            // alert('Profile updated successfully!\n(This is a demo)');
+        }
+
+        const passwordInput = document.getElementById('newPassword');
+        const oldPass = document.getElementById('currentPassword');
+        const confirmPass = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('strength-bar');
+        passwordInput.addEventListener('input', function () {
+            const password = this.value;
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength === 0) {
+                strengthBar.className = 'password-strength-bar';
+            } else if (strength <= 2) {
+                strengthBar.className = 'password-strength-bar weak';
+            } else if (strength === 3) {
+                strengthBar.className = 'password-strength-bar medium';
+            } else {
+                strengthBar.className = 'password-strength-bar strong';
+            }
+        });
+
+        function changePassword(e) {
+            e.preventDefault();
+            
+            if (passwordInput.value !== confirmPass.value) {
+                
+                message.textContent = 'Passwords do not match!';
+                message.classList.remove("success", "block");
+                message.classList.add("error", "active");
+                return;
+            }
+            if (passwordInput.value.length < 8) {
+                message.textContent = "password length should be at least 8 "
+                message.classList.remove("success", "block");
+                message.classList.add("error", "active");
+                setTimeout(() => {
+                    message.textContent = "";
+                    message.classList.remove("active");
+                    message.classList.add("block");
+                }, 3000);
+                return;
+            }
+            const data = {
+                oldPassword: oldPass.value,
+                newPassword: passwordInput.value,
+                confirmNewPassword: confirmPass.value
+            }
+            
+            fetch("http://localhost:3000/updatePassword", {
+                method: "POST",
+                credentials: "include",
+                
+                // CRITICAL: Tell the server we are sending JSON
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // 1. Check for bad HTTP status codes (e.g., 400, 500)
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    // 2. Parse the body as JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 3. Handle custom server-side status codes
+                    message.innerText = data.message;
+
+                    if (data.status === 1) {
+                        message.classList.remove("error", "block");
+                        message.classList.add("success", "active");
+                        
+                        setTimeout(() => {
+                            userData()
+                        }, 3000);
+                        // Optional: Clear form or redirect user on success
+                    } else {
+                        message.classList.remove("success", "block");
+                        message.classList.add("error", "active");
+                    }
+                    console.log("Server Response:", data);
+                })
+                // .catch(error => {
+            //     // 4. Handle network errors or errors thrown in the promise chain
+            //         message.classList.remove("success",  "block");
+            //         message.classList.add("error", "active");
+            //     message.innerText = error.message;
+            //     console.error('Fetch Error:', error.message);
+            // }); 
+            
+            
+            
+        }
+
+        
+        const hemail = document.getElementById("header-email");
+        const hname = document.getElementById("header-name");
+        const avatar = document.getElementById("avatar");
+        function userData() {
+            const user = JSON.parse(sessionStorage.getItem("user"));
+            if (user && name) {
+                name.value = user.fullName
+                city.value = user.city
+                phone.value = user.phone
+                email.value = user.email
+                hemail.textContent = user.email
+                hname.textContent = user.fullName
+                avatar.textContent = user.fullName.split(" ")
+                    .map(word => word[0])
+                    .join("");
+                    
+            }
+        }
+        
+        function logout() {
+            fetch("http://localhost:3000/logout", {
+                method: "GET",
+                credentials: "include",
+                
+                // CRITICAL: Tell the server we are sending JSON
+                
+            })
+            .then(response => {
+                // 1. Check for bad HTTP status codes (e.g., 400, 500)
+                if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    // 2. Parse the body as JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 3. Handle custom server-side status codes
+                    message.innerText = data.message;
+                    
+                    if (data.status === 1) {
+                        message.classList.remove("error", "block");
+                        message.classList.add("success", "active");
+                        
+                        setTimeout(() => {
+window.location.href="login.html"
+                        }, 3000);
+
+                    } else {
+                        message.classList.remove("success", "block");
+                        message.classList.add("error", "active");
+                    }
+                    console.log("Server Response:", data);
+                })
+            }
+            // Initialize
+            userData()
+            renderOrders(orders.slice(0, 2), 'recent-orders');
+        renderOrders(orders, 'orders-list');
+        </script>
+    <script src="nav.js"></script>
+    <script src="protectedRoute.js"></script>
+</body>
+
+</html>

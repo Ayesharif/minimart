@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .success-container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out 0.2s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .order-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .order-number {
+            color: #667eea;
+        }
+
+        .email-notice {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .email-notice p {
+            color: #4338ca;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .order-items {
+            margin-top: 25px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f8f9fa;
+        }
+
+        .item-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .item-quantity {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .success-container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="checkmark-circle">
+            <svg class="checkmark" viewBox="0 0 52 52">
+                <path d="M14 27l8 8 16-16"/>
+            </svg>
+        </div>
+
+        <h1>Order Placed Successfully!</h1>
+        <p class="subtitle">Thank you for your purchase</p>
+
+        <div class="order-info">
+            <div class="info-row">
+                <span class="info-label">Order Number</span>
+                <span class="info-value order-number" id="orderNumber">#ORD-12345</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Order Date</span>
+                <span class="info-value" id="orderDate"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Amount</span>
+                <span class="info-value" id="totalAmount">$0.00</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Estimated Delivery</span>
+                <span class="info-value" id="deliveryDate"></span>
+            </div>
+        </div>
+
+
+        <div class="order-items" id="orderItems"></div>
+
+        <div class="actions">
+            <a href="track-order.html" class="btn btn-primary">Track Order</a>
+            <a href="index.html" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+    </div>
+
+    <script>
+        // Generate random order number
+        function generateOrderNumber() {
+            return '#ORD-' + Math.floor(100000 + Math.random() * 900000);
+        }
+
+        // Get current date
+        function getCurrentDate() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date().toLocaleDateString('en-US', options);
+        }
+
+        // Get estimated delivery date (7 days from now)
+        function getDeliveryDate() {
+            const delivery = new Date();
+            delivery.setDate(delivery.getDate() + 7);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return delivery.toLocaleDateString('en-US', options);
+        }
+
+        // Get data from URL parameters
+        
+        // Set order information
+        document.getElementById('orderNumber').textContent = generateOrderNumber();
+        document.getElementById('orderDate').textContent = getCurrentDate();
+        document.getElementById('deliveryDate').textContent = getDeliveryDate();
+        // document.getElementById('userEmail').textContent = email;
+        
+        // Display order items if provided
+        const params = new URLSearchParams(window.location.search);
+        
+        const productsParam = params.get('orderData');
+        if (productsParam) {
+            try {
+                const {items, totalAmount, userId, deliveryAddress} = JSON.parse(decodeURIComponent(productsParam));
+                document.getElementById('totalAmount').textContent = '$' + totalAmount;
+                const itemsContainer = document.getElementById('orderItems');
+                const products=JSON.parse(items);
+                products.forEach(product => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+                    itemDiv.innerHTML = `
+                        <img src="${product.image}" alt="${product.title}" class="item-image">
+                        <div class="item-details">
+                            <div class="item-title">${product.title}</div>
+                            <div class="item-quantity">Quantity: ${product.quantity}</div>
+                        </div>
+                    `;
+                    itemsContainer.appendChild(itemDiv);
+                });
+
+console.log(productsParam);
+
+            fetch("http://localhost:3000/placeorder", {
+                method: "POST",
+                credentials: "include",
+
+                // CRITICAL: Tell the server we are sending JSON
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({items,userId, totalAmount,deliveryAddress })
+            })
+                .then(response => {
+                    // 1. Check for bad HTTP status codes (e.g., 400, 500)
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                    // 2. Parse the body as JSON
+                    return response.json();
+                })
+                .then(data => {
+                    // 3. Handle custom server-side status codes
+                    message.innerText = data.message;
+
+                    if (data.status === 1) {
+        setTimeout(() => {
+            window.location.href="index.html";
+        }, 3000);
+                        // Optional: Clear form or redirect user on success
+                    } else {
+                        message.classList.remove("success", "block");
+                        message.classList.add("error", "active");
+                    }
+                    console.log("Server Response:", data);
+                })
+
+            } catch (e) {
+                console.error('Error parsing products:', e);
+            }
+        }
+
+
+    </script>
+</body>
+</html>

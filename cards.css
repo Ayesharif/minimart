@@ -1,0 +1,253 @@
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root{
+            --color: #764ba2
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            
+            min-height: 100vh;
+            padding: 3rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 70px;
+        }
+
+        h1 {
+            text-align: center;
+            /* color: white; */
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #393e41; */
+  border-radius: 1rem;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgb(33, 33, 33);
+  isolation: isolate;
+  overflow: hidden;
+        }
+
+        /* .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        } */
+.product-card::before,
+.product-card::after{
+  content: "";
+  position: absolute;
+  /* background-color: white; */
+}
+
+.product-card::before{
+  width: 200%;
+  height: 200%;
+  /* background: white; */
+  background-image: conic-gradient(var(--color)
+  0deg, transparent 60deg, transparent 180deg, var(--color)
+   180deg, transparent 240deg);
+   inset: -50%;
+   z-index: -2;
+   animation: border-animation 4s linear infinite;
+}
+
+.product-card:hover::before{
+  animation-play-state: paused;
+}
+
+@keyframes border-animation {
+  to{
+    transform: rotate(-360deg);
+  }
+  
+}
+
+.product-card::after{
+  inset: 4px;
+  background: white;
+  border-radius: calc(1rem - 4px);
+transition: all 0.3s linear;
+z-index: -1;
+}
+.product-card:hover::after{
+   background-color: rgb(239, 239, 239);
+}
+
+.product-image {
+    /* Define a fixed height for the image area */
+    height: 200px; 
+    width: 100%;
+    /* Hide any parts of the image that overflow the defined height */
+    overflow: hidden; 
+    /* Use flexbox or similar for centering if needed, but not necessary for object-fit */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- 3. The Image Element (The Key Styles) --- */
+.product-image img {
+    /* Ensure the image always fills its container (100% width and height of .product-image) */
+    width: 100%; 
+    height: 100%;
+
+    /* *** THE MOST IMPORTANT PROPERTY *** */
+    /* This ensures the image covers the area without being distorted. 
+       Parts of the image may be cropped (like a background-cover property). */
+    object-fit: cover; 
+    
+    /* Optional: If you want smooth scaling */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Optional: Zoom effect on hover */
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+        .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ef4444;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.new {
+            background: #10b981;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #fbbf24;
+            margin-right: 0.5rem;
+        }
+
+        .rating-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .product-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .current-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .original-price {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+        }
+
+        .add-to-cart {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .add-to-cart:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .products-grid {
+                gap: 1.5rem;
+            }
+
+            body {
+                padding: 2rem 1rem;
+            }
+            .product-footer{
+                flex-direction: column;
+            }
+            .product-footer button{
+                width: 100%;
+            }
+        }
