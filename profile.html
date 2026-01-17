@@ -171,7 +171,7 @@
         const email = document.getElementById("email");
         
         let allOrders = [];
-        const API_URL = 'http://localhost:3000/getorders'; // Replace with your actual API endpoint
+        const API_URL = 'https://minimart-backend-nine.vercel.app/getorders'; // Replace with your actual API endpoint
 
 // Fetch orders from API
 async function fetchOrders() {
@@ -339,7 +339,7 @@ function showSection(sectionId) {
                 email: email.value
             }
             console.log(data);
-            fetch("http://localhost:3000/updateUser", {
+            fetch("https://minimart-backend-nine.vercel.app/updateUser", {
                 method: "POST",
                 credentials: "include",
                 
@@ -440,7 +440,7 @@ function showSection(sectionId) {
                 confirmNewPassword: confirmPass.value
             }
             
-            fetch("http://localhost:3000/updatePassword", {
+            fetch("https://minimart-backend-nine.vercel.app/updatePassword", {
                 method: "POST",
                 credentials: "include",
                 
@@ -510,7 +510,7 @@ function showSection(sectionId) {
         }
         
         function logout() {
-            fetch("http://localhost:3000/logout", {
+            fetch("https://minimart-backend-nine.vercel.app/logout", {
                 method: "GET",
                 credentials: "include",
                 

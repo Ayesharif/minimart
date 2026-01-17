@@ -47,7 +47,7 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     flex-direction: row;
     font-size: 32px;
     font-weight: 700;
-    color: rgb(8, 88, 8);
+    color: white;
 }
 .nav-links a{
     position: relative;

@@ -31,7 +31,7 @@ function initNavbar() {
 
 // 🔥 Auth check (separate function)
 function loadUser() {
-    fetch("http://localhost:3000/authMe", {
+    fetch("https://minimart-backend-nine.vercel.app/authMe", {
         method: "GET",
         credentials: "include",
     })

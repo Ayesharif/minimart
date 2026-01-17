@@ -129,7 +129,7 @@ addToCartBtn.addEventListener('click', () => {
 
 function loadProducts() {
     loaderOn()
-    fetch("http://localhost:3000/products")
+    fetch("https://minimart-backend-nine.vercel.app/products")
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to fetch products: ${response.status}`);
